@@ -1,81 +1,19 @@
+require 'vfs/storages/local'
+
 module Vos
   module Drivers
-    class Local < Abstract    
-      DEFAULT_BUFFER = 1024*1024
-      class << self
-        attr_accessor :buffer
+    class Local < Abstract
+      # 
+      # Vfs
+      # 
+      include Vfs::Storages::Local::Helper
+      def open &block
+        block.call self if block
       end
-      
-      # 
-      # Establishing channel
-      # 
-      def open; end    
+      alias_method :open_fs, :open
       def close; end
       
       
-      # 
-      # File & Dir
-      # 
-      def exist? path
-        File.exist? path
-      end
-      
-      
-      # 
-      # File
-      #       
-      def read_file path, &block
-        File.open path, 'r' do |is|
-          while buff = is.gets(self.class.buffer || DEFAULT_BUFFER)            
-            block.call buff
-          end
-        end
-      end
-      
-      def write_file path, &block        
-        File.open path, 'w' do |os|
-          callback = -> buff {os.write buff}
-          block.call callback
-        end
-      end
-      
-      def remove_file path
-        File.delete path
-      end
-    
-      def file_exist? path
-        File.exist?(path) and !File.directory?(path)
-      end
-              
-      
-      # 
-      # Dir
-      #
-      def create_directory path
-        Dir.mkdir path
-      end
-    
-      def remove_directory path
-        FileUtils.rm_r path
-      end
-      
-      def directory_exist? path
-        File.exist?(path) and File.directory?(path)
-      end
-      
-      
-      # 
-      # Special
-      # 
-      def upload_directory from_local_path, to_remote_path
-        FileUtils.cp_r from_local_path, to_remote_path
-      end
-      
-      def download_directory from_remote_path, to_local_path
-        FileUtils.cp_r from_remote_path, to_local_path
-      end
-
-
       # 
       # Shell
       # 
@@ -85,6 +23,15 @@ module Vos
         end
       
         return code, stdout, stderr
+      end
+      
+      
+      def bash command
+        code, stdout_and_stderr = Open3.popen2e command do |stdin, stdout_and_stderr, wait_thread|  
+          [wait_thread.value.to_i, stdout_and_stderr.read]
+        end
+      
+        return code, stdout_and_stderr
       end
     end
   end

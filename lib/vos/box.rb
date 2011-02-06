@@ -1,6 +1,6 @@
 module Vos
   class Box
-    include Marks, Operations
+    include Shell, Marks, VfsHelper
     
     attr_accessor :options
     
@@ -8,9 +8,11 @@ module Vos
       @options = options
       options[:host] ||= 'localhost'
     end
-    
-    
-    
+
+
+    # 
+    # driver
+    # 
     def driver
       unless @driver
         klass = options[:host] == 'localhost' ? Drivers::Local : Drivers::Ssh
@@ -18,42 +20,25 @@ module Vos
       end
       @driver
     end
-
-
-
-
-
-
     
-    def local_driver
-      @local_driver ||= Drivers::Local.new
-    end
-
-
-
-
-
-        
-    def opened?; !!@opened end
     def open &block
-      if @opened
-        block.call if block
-      else
-        begin
-          driver.open; @opened = true
-          block.call if block
-        ensure
-          driver.close; @opened = false if block
-        end
-      end
+      driver.open &block
     end    
     def close
-      driver.close; @opened = false if opened?
+      driver.close
     end
+
     
-    
+    # 
+    # Micelaneous
+    # 
     def inspect
-      "<Box: #{options[:host]}>"
+      host = options[:host]
+      if host == 'localhost'
+        ''
+      else
+        host
+      end
     end
     alias_method :to_s, :inspect
   end

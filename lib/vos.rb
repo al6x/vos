@@ -4,8 +4,7 @@ require 'vos/gems'
 
 require 'open3'
 
-require 'net/ssh'
-require 'net/sftp'
+
 
 %w(
   support
@@ -14,7 +13,8 @@ require 'net/sftp'
   drivers/local
   drivers/ssh
 
-  box/marks
-  box/operations
+  box/shell
+  box/marks  
+  box/vfs_helper
   box
 ).each{|f| require "vos/#{f}"}

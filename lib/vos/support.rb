@@ -2,6 +2,8 @@ require 'fileutils'
 require 'net/ssh'
 require 'net/sftp'
 
+require 'vfs'
+
 # class File
 #   class << self
 #     def ensure_dir_exist directory, options = {}       
@@ -23,7 +25,7 @@ require 'net/sftp'
 #       FileUtils.cp_r from, to
 #     end
 #     
-#     def remove_dir dir
+#     def delete_dir dir
 #       FileUtils.rm_r dir
 #     end
 #   end
