@@ -6,16 +6,24 @@ describe Vos::Box do
     @box.stub :puts
   end
   
-  describe 'vfs' do
+  describe 'vfs integration' do
     it 'smoke test' do
-      @box.open_fs #['/'].exist?.should be_true
+      @box['/'].exist?.should be_true      
+    end
+    
+    it 'vfs integration' do
+      @box['/'].bash("echo 'ok'").should == "ok\n"
     end
   end
   
   describe "shell" do
     it 'bash' do
       @box.bash("echo 'ok'").should == "ok\n"
-    end  
+    end
+    
+    it 'bash working dir should be /', focus: true do
+      @box.bash('pwd').should == "/\n"
+    end
     
     it 'check with regex' do
       @box.bash "echo 'ok'", /ok/
@@ -24,6 +32,25 @@ describe Vos::Box do
     
     it "exec" do
       @box.exec("echo 'ok'").should == [0, "ok\n", ""]
+    end
+    
+    it 'home' do
+      @box.home.should_not be_nil
+    end
+    
+    it 'env' do
+      @box.env.should == {}
+      @box.env = {a: 'b'}
+      
+      @box.env c: 'd' do
+        @box.env.should == {a: 'b', c: 'd'}
+      end
+      @box.env.should == {a: 'b'}
+      
+      @box.env(c: 'd')
+      @box.env.should == {a: 'b', c: 'd'}
+      
+      @box.env('ls').should == "a=b c=d ls"
     end
   end
 end

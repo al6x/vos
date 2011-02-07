@@ -5,7 +5,6 @@ require 'vos/gems'
 require 'open3'
 
 
-
 %w(
   support
 
@@ -15,6 +14,8 @@ require 'open3'
 
   box/shell
   box/marks  
-  box/vfs_helper
+  box/vfs
   box
+  
+  helpers/ubuntu
 ).each{|f| require "vos/#{f}"}

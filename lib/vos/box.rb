@@ -1,6 +1,6 @@
 module Vos
   class Box
-    include Shell, Marks, VfsHelper
+    include Shell, Marks, Vfs
     
     attr_accessor :options
     

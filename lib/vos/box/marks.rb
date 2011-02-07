@@ -3,12 +3,12 @@ module Vos
     module Marks
       def mark key
         ensure_mark_requrements!
-        bash "touch #{marks_dir}/#{key}"
+        file("#{marks_dir}/#{key}").create!
       end
 
       def has_mark? key
         ensure_mark_requrements!
-        file_exist? "#{marks_dir}/#{key}"
+        entry["#{marks_dir}/#{key}"].exist?
       end
     
       def clear_marks
@@ -22,7 +22,7 @@ module Vos
 
         def ensure_mark_requrements!
           unless @ensure_mark_requrements
-            create_dir marks_dir unless directory_exist? marks_dir
+            self.dir(marks_dir).create
             @ensure_mark_requrements = true
           end
         end
