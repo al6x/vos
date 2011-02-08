@@ -1,7 +1,7 @@
 # Vos - Virtual Operating System
 
-Small abstraction over local/remote Operating System, mainly it should be used in conjunction with the [Virtual File System][vos] tool. Kind of like of
-the Capistrano but without extra stuff and more universal, not forcing You to follow 'The Rails Way'.
+Small abstraction over Operating System, mainly it should be used in conjunction with [Virtual File System][vos] tool. Kind of 
+Capistrano but without extra stuff and more universal, not forcing You to follow 'The Rails Way'.
 
 Currently, there are following implementations available:
 
@@ -22,8 +22,8 @@ Currently, there are following implementations available:
     server.bash 'ls'
     server['apps/cool_app'].bash 'rails production'
 
-For more details look also to the [Virtual File System][vos] project. 
-Or checkout sample configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small 
+For more details look also to [Virtual File System][vos] project. 
+Or checkout configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small 
 configuration tool [Cluster Management][cluster_management].
   
 ## TODO
@@ -34,7 +34,7 @@ configuration tool [Cluster Management][cluster_management].
 - some handy shortcuts for ubuntu
 - integration with Vos
 
-### v 0.2 (not started)
+### v 0.2
 
 - process management (find/kill/filters/attributes)
 - other os resources management (disk)
