@@ -1,4 +1,4 @@
-# Vfs - Virtual File System
+# Vos - Virtual Operating System
 
 Small abstraction over local/remote Operating System, mainly it should be used in conjunction with the [Virtual File System][vos] tool. Kind of like of
 the Capistrano but without extra stuff and more universal, not forcing You to follow 'The Rails Way'.
