@@ -21,7 +21,7 @@ describe Vos::Box do
       @box.bash("echo 'ok'").should == "ok\n"
     end
     
-    it 'bash working dir should be /', focus: true do
+    it 'bash working dir should be /' do
       @box.bash('pwd').should == "/\n"
     end
     
@@ -50,7 +50,7 @@ describe Vos::Box do
       @box.env(c: 'd')
       @box.env.should == {a: 'b', c: 'd'}
       
-      @box.env('ls').should == "a=b c=d ls"
+      @box.env('ls').should == "a=b c=d && ls"
     end
   end
 end

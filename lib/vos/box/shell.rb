@@ -68,10 +68,8 @@ module Vos
       
     
       def home path = nil
-        open do
-          @home ||= bash('cd ~; pwd').gsub("\n", '')    
-          "#{@home}#{path}"
-        end
+        open{@home = bash('cd ~; pwd').gsub("\n", '')} unless @home
+        path ? self[@home][path] : self[@home]
       end    
     
       # def generate_tmp_dir_name

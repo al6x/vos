@@ -93,6 +93,22 @@ module Vos
             end
           end
         end
+        
+        def efficient_dir_copy from, to
+          from.storage.open_fs do |from_fs|          
+            to.storage.open_fs do |to_fs|
+              if from_fs.local? 
+                sftp.upload! from.path, fix_path(to.path)
+                true
+              elsif to_fs.local?
+                sftp.download! fix_path(to.path), from.path, :recursive => true
+                true
+              else
+                false
+              end
+            end
+          end
+        end
 
         # def move_dir path
         #   raise 'not supported'
@@ -102,14 +118,6 @@ module Vos
         # 
         # Special
         # 
-        # def upload_directory from_local_path, to_remote_path
-        #   sftp.upload! from_local_path, fix_path(to_remote_path)
-        # end
-        # 
-        # def download_directory from_remote_path, to_local_path
-        #   sftp.download! fix_path(from_remote_path), to_local_path, :recursive => true
-        # end
-
         def tmp &block
           tmp_dir = "/tmp/vfs_#{rand(10**3)}"        
           if block
@@ -124,6 +132,8 @@ module Vos
             tmp_dir
           end
         end
+        
+        def local?; false end
       end
       
       def initialize options = {}

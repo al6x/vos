@@ -6,7 +6,7 @@ module Vos
       # 
       # Vfs
       # 
-      include Vfs::Storages::Local::Helper
+      include Vfs::Storages::Local::LocalVfsHelper
       def open &block
         block.call self if block
       end
