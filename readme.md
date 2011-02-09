@@ -13,16 +13,15 @@ Currently, there are following implementations available:
     $ gem install vos
 
 ## Code samples:
-    gem 'vos'                                    # Virtual Operating System
+    gem 'vos'                                         # Virtual Operating System
     require 'vos'
 
-    # Connections, let's deploy our 'cool_app' project from our local box to remote server
-    server = Vfs::Box.new(host: 'cool_app.com', ssh: {user: 'me', password: 'secret'})
+    server = Box.new('cool_app.com')                  # it will use id_rsa, or You can add {user: 'me', password: 'secret'}
     
-    server.bash 'ls'
-    server['apps/cool_app'].bash 'rails production'
+    server.bash 'ls'                                  # ls /
+    server['apps/cool_app'].bash 'rails production'   # cd /apps/cool_app && rails production
 
-For more details look also to [Virtual File System][vos] project. 
+For more details look also to [Virtual File System][vfs] project. 
 Or checkout configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small 
 configuration tool [Cluster Management][cluster_management].
   
@@ -39,6 +38,6 @@ configuration tool [Cluster Management][cluster_management].
 - process management (find/kill/filters/attributes)
 - other os resources management (disk)
 
-[vos]: http://github.com/alexeypetrushin/vos
+[vfs]: http://github.com/alexeypetrushin/vfs
 [cluster_management]: http://github.com/alexeypetrushin/cluster_management
 [my_cluster]: http://github.com/alexeypetrushin/my_cluster
