@@ -14,7 +14,7 @@ module Vos
       end
       
       def to_dir
-        to_entry
+        to_entry.dir
       end
       
       # def [] path
@@ -22,7 +22,12 @@ module Vos
       # end
       # alias_method :/, :[]
             
-      %w(dir file entry entries [] / tmp).each do |m|
+      %w(
+        entry dir file 
+        entries dirs files
+        [] / 
+        tmp
+      ).each do |m|
         script = <<-RUBY
           def #{m} *a, &b
             to_entry.#{m} *a, &b

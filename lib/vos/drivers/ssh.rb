@@ -39,7 +39,7 @@ module Vos
             opt = self.options.clone
             host = opt.delete :host #] || raise('host not provided!')
             # user = options.delete(:user) || raise('user not provied!')
-            
+
             @ssh = Net::SSH.start(host, nil, opt)
             @sftp = @ssh.sftp.connect
           end

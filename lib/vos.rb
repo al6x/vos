@@ -19,3 +19,7 @@ require 'open3'
   
   helpers/ubuntu
 ).each{|f| require "vos/#{f}"}
+
+unless $vos_dont_mess_with_global_namespace
+  Box = Vos::Box
+end
