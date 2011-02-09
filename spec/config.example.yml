@@ -1,4 +1,6 @@
 :ssh:
   :host: some_host.com
-  :user: some_user
-  :password: some_password
+  
+  # optional, you can omit and use id_rsa key instead
+  # :user: some_user
+  # :password: some_password

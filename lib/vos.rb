@@ -4,12 +4,12 @@ require 'vos/gems'
 
 require 'open3'
 
-
 %w(
   support
 
   drivers/abstract
   drivers/local
+  drivers/ssh_vfs_storage
   drivers/ssh
 
   box/shell

@@ -5,7 +5,7 @@ describe Vos::Drivers::Ssh do
   it_should_behave_like "vfs storage"
 
   before :all do
-    @storage = @driver = Vos::Drivers::Ssh.new(config[:remote_driver])
+    @storage = @driver = Vos::Drivers::Ssh.new(config[:ssh_driver])
     @driver.open
   end
   

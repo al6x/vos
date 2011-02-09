@@ -33,6 +33,12 @@ module Vos
       
         return code, stdout_and_stderr
       end
+      
+      
+      # 
+      # Other
+      # 
+      def to_s; '' end
     end
   end
 end
