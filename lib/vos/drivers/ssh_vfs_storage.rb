@@ -11,6 +11,10 @@ module Vos
         attrs[:file] = stat.file?
         attrs[:dir] = stat.directory?
         # stat.symlink?
+        
+        # attributes special for file system
+        attrs[:updated_at] = stat.mtime
+        
         attrs                  
       rescue Net::SFTP::StatusException
         {}
