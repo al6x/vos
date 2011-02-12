@@ -5,7 +5,7 @@ module Vos
         {:DEBIAN_FRONTEND => 'noninteractive'}
       end
       def wrap_cmd env_str, cmd
-        %(. #{env_file.path} && #{env_str}#{' && ' unless env_str.empty?}#{cmd})
+        %(source #{env_file.path} && #{env_str}#{' && ' unless env_str.empty?}#{cmd})
       end
       
       def env_file
@@ -36,12 +36,18 @@ end
 module Vfs
   class File
     def append_to_environment_of box, reload = true
-      raise "#{box} must be an Vos::Box" unless file.is_a? Vos::Box        
+      raise "#{box} must be an Vos::Box" unless box.is_a? Vos::Box        
       
-      copy_to! box.dir('/etc/profile_ext').file(name)
+      remote_file = box.dir('/etc/profile_ext').file(name)
+      copy_to! remote_file
 
-      require_clause = "source #{remote_file.path}"
-      box.env_file.append "\n#{require_clause}\n" unless env_file.content.include? require_clause
+      require_clause = <<-BASH
+
+# #{name}
+source #{remote_file.path}
+      BASH
+            
+      box.env_file.append require_clause unless box.env_file.content.include? require_clause
       
       box.reload_env if reload
     end

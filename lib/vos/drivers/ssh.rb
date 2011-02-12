@@ -128,7 +128,6 @@ module Vos
           end  
         
           channel.wait      
-        
           [stdout_data, stderr_data, exit_code, exit_signal]
         end    
     end
