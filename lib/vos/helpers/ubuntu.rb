@@ -34,6 +34,35 @@ module Vos
 end
 
 module Vfs
+  class Entry
+    def symlink_to entry, options = {}
+      raise "invalid argument!" unless entry.is_a? Entry
+      raise "can't use symlink ('#{self}' and '#{entry}' are on different storages)!" if self.storage != entry.storage
+      raise "symlink target '' not exist!" unless entry.exist?
+      storage.bash "ln -s#{'f' if options[:override]} #{entry.path} #{path}"
+    end
+    
+    def symlink_to! entry
+      symlink_to entry, override: true
+    end
+  end
+  
+  class Dir
+    def rsync_to entry
+      raise "invalid argument!" unless entry.is_a? Entry      
+      raise "#{path} must be a Dir" unless dir?
+      raise "#{entry.path} can't be a File!" if entry.file?
+      
+      if local? and !entry.local?
+        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress #{path}/ root@#{entry.storage.host}:#{entry.path}")
+      elsif entry.local? and !local?        
+        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress root@#{storage.host}:#{path}/ #{entry.path}")
+      else
+        raise "invalid usage!"
+      end
+    end
+  end
+  
   class File
     def append_to_environment_of box, reload = true
       raise "#{box} must be an Vos::Box" unless box.is_a? Vos::Box        

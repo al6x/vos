@@ -77,7 +77,6 @@ module Vos
       def bash command
         # somehow net-ssh doesn't executes ~/.profile, so we need to execute it manually
         # command = ". ~/.profile && #{command}"
-
         stdout_and_stderr, stderr, code, signal = hacked_exec! ssh, command, true
 
         return code, stdout_and_stderr
@@ -88,6 +87,7 @@ module Vos
       # Micelaneous
       # 
       def to_s; options[:host] end
+      def host; options[:host] end
       
       protected
         attr_accessor :ssh, :sftp

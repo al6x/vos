@@ -2,8 +2,6 @@ module Vos
   class Box
     include Shell, Marks, Vfs
     
-    attr_accessor :options
-    
     def initialize *args
       first = args.first
       if args.empty?
@@ -18,12 +16,12 @@ module Vos
           options[:host] = first.to_s
         end
         
-        @driver = options[:host] == 'localhost' ? Drivers::Local.new(options) : Drivers::Ssh.new(options)
+        @driver = options[:host] == 'localhost' ? Drivers::Local.new : Drivers::Ssh.new(options)
       elsif args.size == 1
         @driver = first
       else
         raise 'invalid arguments'
-      end      
+      end
     end
 
 
@@ -43,15 +41,15 @@ module Vos
     # 
     # Micelaneous
     # 
-    def inspect
-      driver.to_s
-      # host = options[:host]
-      # if host == 'localhost'
-      #   ''
-      # else
-      #   host
-      # end
-    end
+    def inspect; driver.to_s end
     alias_method :to_s, :inspect
+    
+    def host; driver.host end
+    
+    def local?; host == 'localhost' end
+    
+    class << self      
+      def local; @local ||= Box.new end
+    end
   end
 end

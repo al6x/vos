@@ -83,7 +83,7 @@ module Vos
         exec "rm -r #{path}"
       end
 
-      def each path, &block
+      def each_entry path, &block
         sftp.dir.foreach path do |stat|
           next if stat.name == '.' or stat.name == '..'
           if stat.directory?
@@ -94,14 +94,16 @@ module Vos
         end
       end
       
-      def efficient_dir_copy from, to
+      def efficient_dir_copy from, to, override
+        return false if override # sftp doesn't support this behaviour
+        
         from.storage.open_fs do |from_fs|          
           to.storage.open_fs do |to_fs|
             if from_fs.local? 
               sftp.upload! from.path, fix_path(to.path)
               true
             elsif to_fs.local?
-              sftp.download! fix_path(to.path), from.path, :recursive => true
+              sftp.download! fix_path(from.path), to.path, :recursive => true
               true
             else
               false

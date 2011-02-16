@@ -2,7 +2,7 @@ require 'vfs/storages/local'
 
 module Vos
   module Drivers
-    class Local < Abstract
+    class Local < Abstract                  
       # 
       # Vfs
       # 
@@ -39,6 +39,7 @@ module Vos
       # Other
       # 
       def to_s; '' end
+      def host; 'localhost' end
     end
   end
 end
