@@ -4,7 +4,7 @@ describe Vos::Drivers::Local do
   it_should_behave_like "vos driver"
   it_should_behave_like "vfs storage"  
   
-  before :each do
+  before do
     @storage = @driver = Vos::Drivers::Local.new
   end
 end

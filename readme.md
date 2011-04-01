@@ -35,6 +35,7 @@ configuration tool [Cluster Management][cluster_management].
 
 ### v 0.2
 
+- add :host/:user/:port attributes to box
 - process management (find/kill/filters/attributes)
 - other os resources management (disk)
 

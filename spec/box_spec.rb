@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Vos::Box do  
-  before :each do
+  before do
     @box = Vos::Box.new
     @box.stub :puts
   end

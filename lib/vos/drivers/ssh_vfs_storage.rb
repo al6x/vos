@@ -103,7 +103,7 @@ module Vos
               sftp.upload! from.path, fix_path(to.path)
               true
             elsif to_fs.local?
-              sftp.download! fix_path(from.path), to.path, :recursive => true
+              sftp.download! fix_path(from.path), to.path, recursive: true
               true
             else
               false

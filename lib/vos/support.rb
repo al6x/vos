@@ -3,6 +3,13 @@ require 'net/ssh'
 require 'net/sftp'
 
 require 'vfs'
+Vfs.class_eval do
+  class << self
+    def default_storage
+      ::Vos::Box.local
+    end
+  end
+end
 
 # class File
 #   class << self
@@ -11,7 +18,7 @@ require 'vfs'
 #       clean = options.delete :clean
 #       raise "unsupported options #{options.keys}!" unless options.empty?
 #     
-#       FileUtils.rm_r directory, :force => true if clean and File.exist?(directory)
+#       FileUtils.rm_r directory, force: true if clean and File.exist?(directory)
 #       FileUtils.mkdir_p directory
 #     end
 #   
