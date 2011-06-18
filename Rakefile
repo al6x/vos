@@ -2,7 +2,7 @@ require 'rake_ext'
 
 project(
   name: "vos",
-  version: "0.2",
+  version: "0.2.1",
   summary: "Virtual Operating System",
 
   author: "Alexey Petrushin",
