@@ -1,6 +1,6 @@
 # Vos - Virtual Operating System
 
-Small abstraction over Operating System, mainly it should be used in conjunction with [Virtual File System][vos] tool. Kind of 
+Small abstraction over Operating System, mainly it should be used in conjunction with [Virtual File System][vfs] tool. Kind of 
 Capistrano but without extra stuff and more universal, not forcing You to follow 'The Rails Way'.
 
 Currently, there are following implementations available:
