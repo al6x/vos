@@ -10,16 +10,21 @@ Currently, there are following implementations available:
 
 ## Installation
 
-    $ gem install vos
+```bash
+$ gem install vos
+```
 
 ## Code samples:
-    gem 'vos'                                         # Virtual Operating System
-    require 'vos'
 
-    server = Box.new('cool_app.com')                  # it will use id_rsa, or You can add {user: 'me', password: 'secret'}
-    
-    server.bash 'ls'                                  # ls /
-    server['apps/cool_app'].bash 'rails production'   # cd /apps/cool_app && rails production
+```ruby
+gem 'vos'                                         # Virtual Operating System
+require 'vos'
+
+server = Box.new('cool_app.com')                  # it will use id_rsa, or You can add {user: 'me', password: 'secret'}
+
+server.bash 'ls'                                  # ls /
+server['apps/cool_app'].bash 'rails production'   # cd /apps/cool_app && rails production
+```
 
 For more details look also to [Virtual File System][vfs] project. 
 Or checkout configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small 
