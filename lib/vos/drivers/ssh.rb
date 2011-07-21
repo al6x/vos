@@ -84,7 +84,7 @@ module Vos
       
       
       # 
-      # Micelaneous
+      # Miscellaneous
       # 
       def to_s; options[:host] end
       def host; options[:host] end

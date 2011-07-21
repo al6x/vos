@@ -39,7 +39,7 @@ module Vos
 
     
     # 
-    # Micelaneous
+    # Miscellaneous
     # 
     def inspect; driver.to_s end
     alias_method :to_s, :inspect
