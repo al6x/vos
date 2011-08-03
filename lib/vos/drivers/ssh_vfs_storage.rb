@@ -83,8 +83,8 @@ module Vos
         exec "rm -r #{path}"
       end
 
-      def each_entry path, filter, &block
-        raise "SshVfsStorage not support :each_entry with filter!" if filter
+      def each_entry path, query, &block
+        raise "SshVfsStorage not support :each_entry with query!" if query
         
         sftp.dir.foreach path do |stat|
           next if stat.name == '.' or stat.name == '..'
