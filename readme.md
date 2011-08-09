@@ -30,20 +30,6 @@ For more details look also to [Virtual File System][vfs] project.
 Or checkout configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small 
 configuration tool [Cluster Management][cluster_management].
   
-## TODO
-
-### v 0.1 (all done)
-
-- bash
-- some handy shortcuts for ubuntu
-- integration with Vos
-
-### v 0.2
-
-- add :host/:user/:port attributes to box
-- process management (find/kill/filters/attributes)
-- other os resources management (disk)
-
 [vfs]: http://github.com/alexeypetrushin/vfs
 [cluster_management]: http://github.com/alexeypetrushin/cluster_management
 [my_cluster]: http://github.com/alexeypetrushin/my_cluster
