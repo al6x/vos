@@ -30,7 +30,7 @@ For more details look also to [Virtual File System][vfs] project.
 Or checkout configuration I use to control my production servers [My Cluster][my_cluster] in conjunction with small
 configuration tool [Cluster Management][cluster_management].
 
-## Please let me know about bugs and Your proposals, there's the 'Issues' tab at the top, feel free to submit.
+## License
 
 Copyright (c) Alexey Petrushin http://petrush.in, released under the MIT license.
 
