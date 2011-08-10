@@ -1,6 +1,16 @@
 module Vos
   module Drivers
-      module SshVfsStorage
+    module SshVfsStorage
+      class Writer
+        def initialize out
+          @out = out
+        end
+
+        def write data
+          @out.write data
+        end
+      end
+      
       # 
       # Attributes
       # 
@@ -11,10 +21,10 @@ module Vos
         attrs[:file] = stat.file?
         attrs[:dir] = stat.directory?
         # stat.symlink?
-        
+      
         # attributes special for file system
         attrs[:updated_at] = stat.mtime
-        
+      
         attrs                  
       rescue Net::SFTP::StatusException
         {}
@@ -52,13 +62,12 @@ module Vos
             ''
           end
           write_file path, false do |writer|
-            writer.call data
+            writer.write data
             block.call writer
           end
         else
-          sftp.file.open fix_path(path), 'w' do |os|
-            writer = -> buff {os.write buff}
-            block.call writer
+          sftp.file.open fix_path(path), 'w' do |out|
+            block.call Writer.new(out)
           end
         end          
       end   
@@ -85,7 +94,7 @@ module Vos
 
       def each_entry path, query, &block
         raise "SshVfsStorage not support :each_entry with query!" if query
-        
+      
         sftp.dir.foreach path do |stat|
           next if stat.name == '.' or stat.name == '..'
           if stat.directory?
@@ -95,7 +104,7 @@ module Vos
           end
         end
       end
-      
+    
       # def efficient_dir_copy from, to, override
       #   return false if override # sftp doesn't support this behaviour
       #   
@@ -131,7 +140,7 @@ module Vos
           tmp_dir
         end
       end
-      
+    
       def local?; false end
     end
   end
