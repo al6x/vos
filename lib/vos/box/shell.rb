@@ -1,10 +1,10 @@
 module Vos
   class Box
-    module Shell                
+    module Shell
       def bash cmd, *args
         self['/'].bash cmd, *args
       end
-      
+
       def bash_without_path cmd, *args
         check = args.shift if args.first.is_a?(Regexp)
         options = args.last || {}
@@ -14,7 +14,7 @@ module Vos
 
         unless code == 0
           puts stdout_and_stderr
-          raise "can't execute '#{cmd}'!" 
+          raise "can't execute '#{cmd}'!"
         end
 
         if check and (stdout_and_stderr !~ check)
@@ -24,18 +24,18 @@ module Vos
 
         stdout_and_stderr
       end
-    
+
       def exec cmd
         open{driver.exec(env(cmd))}
       end
-      
+
       attr_writer :env
       def env command_or_env_variables = nil, &block
         @env ||= default_env
-        
-        if block                    
+
+        if block
           before = env.clone
-          begin            
+          begin
             if variables = command_or_env_variables
               raise 'invalid arguments' unless variables.is_a? Hash
               @env.merge! variables
@@ -58,26 +58,26 @@ module Vos
             raise 'invalid arguments'
           end
         end
-      end      
+      end
       def default_env
         {}
       end
       def wrap_cmd env_str, cmd
         %(#{env_str}#{' && ' unless env_str.empty?}#{cmd})
       end
-      
-    
+
+
       def home path = nil
         open{@home = bash('cd ~; pwd').gsub("\n", '')} unless @home
         path ? self[@home][path] : self[@home]
-      end    
-    
+      end
+
       # def generate_tmp_dir_name
       #   open do
       #     driver.generate_tmp_dir_name
       #   end
       # end
-    
+
       # def inspect
       #   "<Box: #{options[:host]}>"
       # end

@@ -13,10 +13,10 @@ require 'open3'
   drivers/ssh
 
   box/shell
-  box/marks  
+  box/marks
   box/vfs
   box
-  
+
   helpers/ubuntu
 ).each{|f| require "vos/#{f}"}
 

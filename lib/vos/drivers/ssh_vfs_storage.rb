@@ -10,10 +10,10 @@ module Vos
           @out.write data
         end
       end
-      
-      # 
+
+      #
       # Attributes
-      # 
+      #
       def attributes path
 
         stat = sftp.stat! fix_path(path)
@@ -21,22 +21,22 @@ module Vos
         attrs[:file] = stat.file?
         attrs[:dir] = stat.directory?
         # stat.symlink?
-      
+
         # attributes special for file system
         attrs[:updated_at] = stat.mtime
-      
-        attrs                  
+
+        attrs
       rescue Net::SFTP::StatusException
         {}
       end
 
-      def set_attributes path, attrs      
+      def set_attributes path, attrs
         raise 'not supported'
       end
 
-      # 
+      #
       # File
-      # 
+      #
       def read_file path, &block
         sftp.file.open fix_path(path), 'r' do |is|
           while buff = is.gets
@@ -45,15 +45,15 @@ module Vos
         end
       end
 
-      def write_file path, append, &block  
-        # there's no support for :append in Net::SFTP, so we just mimic it      
-        if append          
+      def write_file path, append, &block
+        # there's no support for :append in Net::SFTP, so we just mimic it
+        if append
           attrs = attributes(path)
           data = if attrs
             if attrs[:file]
               os = ""
               read_file(path){|buff| os << buff}
-              delete_file path                
+              delete_file path
               os
             else
               raise "can't append to dir!"
@@ -69,8 +69,8 @@ module Vos
           sftp.file.open fix_path(path), 'w' do |out|
             block.call Writer.new(out)
           end
-        end          
-      end   
+        end
+      end
 
       def delete_file remote_file_path
         sftp.remove! fix_path(remote_file_path)
@@ -81,9 +81,9 @@ module Vos
       # end
 
 
-      # 
+      #
       # Dir
-      # 
+      #
       def create_dir path
         sftp.mkdir! path
       end
@@ -94,7 +94,7 @@ module Vos
 
       def each_entry path, query, &block
         raise "SshVfsStorage not support :each_entry with query!" if query
-      
+
         sftp.dir.foreach path do |stat|
           next if stat.name == '.' or stat.name == '..'
           if stat.directory?
@@ -104,13 +104,13 @@ module Vos
           end
         end
       end
-    
+
       # def efficient_dir_copy from, to, override
       #   return false if override # sftp doesn't support this behaviour
-      #   
-      #   from.storage.open_fs do |from_fs|          
+      #
+      #   from.storage.open_fs do |from_fs|
       #     to.storage.open_fs do |to_fs|
-      #       if from_fs.local? 
+      #       if from_fs.local?
       #         sftp.upload! from.path, fix_path(to.path)
       #         true
       #       elsif to_fs.local?
@@ -123,11 +123,11 @@ module Vos
       #   end
       # end
 
-      # 
+      #
       # Special
-      # 
+      #
       def tmp &block
-        tmp_dir = "/tmp/vfs_#{rand(10**3)}"        
+        tmp_dir = "/tmp/vfs_#{rand(10**3)}"
         if block
           begin
             create_dir tmp_dir
@@ -140,7 +140,7 @@ module Vos
           tmp_dir
         end
       end
-    
+
       def local?; false end
     end
   end
