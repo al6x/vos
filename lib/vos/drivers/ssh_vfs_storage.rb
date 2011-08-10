@@ -96,28 +96,23 @@ module Vos
         end
       end
       
-      def efficient_dir_copy from, to, override
-        return false if override # sftp doesn't support this behaviour
-        
-        from.storage.open_fs do |from_fs|          
-          to.storage.open_fs do |to_fs|
-            if from_fs.local? 
-              sftp.upload! from.path, fix_path(to.path)
-              true
-            elsif to_fs.local?
-              sftp.download! fix_path(from.path), to.path, recursive: true
-              true
-            else
-              false
-            end
-          end
-        end
-      end
-
-      # def move_dir path
-      #   raise 'not supported'
+      # def efficient_dir_copy from, to, override
+      #   return false if override # sftp doesn't support this behaviour
+      #   
+      #   from.storage.open_fs do |from_fs|          
+      #     to.storage.open_fs do |to_fs|
+      #       if from_fs.local? 
+      #         sftp.upload! from.path, fix_path(to.path)
+      #         true
+      #       elsif to_fs.local?
+      #         sftp.download! fix_path(from.path), to.path, recursive: true
+      #         true
+      #       else
+      #         false
+      #       end
+      #     end
+      #   end
       # end
-
 
       # 
       # Special
