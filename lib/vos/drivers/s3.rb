@@ -47,7 +47,6 @@ module Vos
       # Vfs
       #
       include S3VfsStorage
-      alias_method :open_fs, :open
 
 
       #
@@ -55,6 +54,10 @@ module Vos
       #
       def inspect; "<#{self.class.name} #{initialization_options.inspect}, #{options.inspect}>" end
       alias_method :to_s, :inspect
+
+      def _clear
+        bucket.objects.each{|o| o.delete}
+      end
 
       protected
         attr_reader :initialization_options, :options

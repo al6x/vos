@@ -12,57 +12,75 @@ if defined? AWS
     end
     after(:all){@storage.close}
 
+    before{@storage._clear}
+    after{@storage._clear}
+
     it_should_behave_like 'vfs storage basic'
+    it_should_behave_like 'vfs storage attributes basic'
     it_should_behave_like 'vfs storage files'
 
-    describe 'vfs storage s3 fake dirs' do
-      before do
-        @tmp_dir = @storage.open_fs{|fs| fs.tmp}
-        @remote_dir = "#{@tmp_dir}/some_dir"
+    describe 'limited attributes' do
+      it "attributes for files" do
+        @storage.write_file('/file', false){|w| w.write 'something'}
+        attrs = @storage.attributes('/file')
+        attrs[:file].should be_true
+        attrs[:dir].should  be_false
+        # attrs[:created_at].class.should == Time
+        attrs[:updated_at].class.should == Time
+        attrs[:size].should == 9
       end
+    end
 
-      after do
-        @storage.open_fs{|fs| fs.delete_dir @tmp_dir if fs.attributes(@tmp_dir)[:dir]}
-      end
+    describe 'limited tmp' do
+      it "tmp dir" do
+        @storage.tmp.should_not be_nil
 
-      def create_s3_dir fs, dir
-        fs.write_file("#{dir}/file.txt", false){|w| w.write 'something'}
-      end
-
-      it "directory_exist?, create_dir, delete_dir" do
-        @storage.open_fs do |fs|
-          fs.attributes(@remote_dir).should == {file: false, dir: false}
-          create_s3_dir fs, @remote_dir
-          fs.attributes(@remote_dir).subset(:file, :dir).should == {file: false, dir: true}
-          fs.delete_dir(@remote_dir)
-          fs.attributes(@remote_dir).should == {file: false, dir: false}
+        file_path = nil
+        @storage.tmp do |tmp_dir|
+          file_path = "#{tmp_dir}/file"
+          @storage.write_file(file_path, false){|w| w.write 'something'}
         end
+        file_path.should_not be_nil
+        @storage.attributes(file_path).should be_nil
+      end
+    end
+
+    describe 'limited dirs' do
+      def create_s3_fake_dir dir
+        @storage.write_file("#{dir}/file.txt", false){|w| w.write 'something'}
+      end
+
+      it "directory crud" do
+        @storage.attributes('/dir').should be_nil
+
+        create_s3_fake_dir('/dir')
+        attrs = @storage.attributes('/dir')
+        attrs[:file].should be_false
+        attrs[:dir].should  be_true
+
+        @storage.delete_dir('/dir')
+        @storage.attributes('/dir').should be_nil
       end
 
       it 'should delete not-empty directories' do
-        @storage.open_fs do |fs|
-          create_s3_dir fs, @remote_dir
-          create_s3_dir fs, "#{@remote_dir}/dir"
-          fs.write_file("#{@remote_dir}/dir/file", false){|w| w.write 'something'}
-          fs.delete_dir(@remote_dir)
-          fs.attributes(@remote_dir).should == {file: false, dir: false}
-        end
+        create_s3_fake_dir('/dir')
+        create_s3_fake_dir('/dir/dir2')
+        @storage.write_file('/dir/dir2/file', false){|w| w.write 'something'}
+        @storage.attributes('/dir').should_not be_nil
+
+        @storage.delete_dir('/dir')
+        @storage.attributes('/dir').should be_nil
       end
 
       it 'each' do
-        @storage.open_fs do |fs|
-          list = {}
-          fs.each_entry(@tmp_dir, nil){|path, type| list[path] = type}
-          list.should be_empty
+        # -> {@storage.each_entry('/not_existing_dir', nil){|path, type| list[path] = type}}.should raise_error
 
-          dir, file = "#{@tmp_dir}/dir", "#{@tmp_dir}/file"
-          create_s3_dir fs, dir
-          fs.write_file(file, false){|w| w.write 'something'}
+        create_s3_fake_dir('/dir/dir2')
+        @storage.write_file('/dir/file', false){|w| w.write 'something'}
 
-          list = {}
-          fs.each_entry(@tmp_dir, nil){|path, type| list[path] = type}
-          list.should == {'dir' => :dir, 'file' => :file}
-        end
+        list = {}
+        @storage.each_entry('/dir', nil){|path, type| list[path] = type}
+        list.should == {'dir2' => :dir, 'file' => :file}
       end
     end
   end

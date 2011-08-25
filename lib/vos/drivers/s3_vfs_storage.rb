@@ -29,13 +29,15 @@ module Vos
         attrs[:file] = file_exists
         if file_exists
           attrs[:dir] = false
+        elsif dir_exists? path
+          attrs[:dir] = true
         else
-          attrs[:dir] = dir_exists? path
+          return nil
         end
 
         if file_exists
           attrs[:size] = file.content_length
-          attrs[:last_modified] = file.last_modified
+          attrs[:updated_at] = file.last_modified
         end
 
         attrs
@@ -60,7 +62,6 @@ module Vos
         file = bucket.objects[path]
         file_exist = file.exists?
         raise "can't write, file #{original_path} already exist!" if !append and file_exist
-        raise "can't write, dir #{original_path} already exist!" if dir_exists? path
 
         if append
           # there's no support for :append in Fog, so we just mimic it
@@ -122,7 +123,7 @@ module Vos
       # Special
       #
       def tmp &block
-        tmp_dir = "/tmp/vfs_#{rand(10**6)}"
+        tmp_dir = "/tmp/#{rand(10**6)}"
         if block
           begin
             block.call tmp_dir

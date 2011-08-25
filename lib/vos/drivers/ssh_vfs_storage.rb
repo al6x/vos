@@ -15,22 +15,29 @@ module Vos
       # Attributes
       #
       def attributes path
+        path = with_root path
+        path = fix_path path
 
-        stat = sftp.stat! fix_path(path)
+        stat = sftp.stat! path
         attrs = {}
         attrs[:file] = stat.file?
         attrs[:dir] = stat.directory?
         # stat.symlink?
 
         # attributes special for file system
-        attrs[:updated_at] = stat.mtime
+        time = stat.mtime
+        attrs[:updated_at] = time && Time.at(time)
+        attrs[:size]       = stat.size if attrs[:file]
 
         attrs
       rescue Net::SFTP::StatusException
-        {file: false, dir: false}
+        nil
       end
 
       def set_attributes path, attrs
+        path = with_root path
+        path = fix_path path
+
         raise 'not supported'
       end
 
@@ -38,7 +45,10 @@ module Vos
       # File
       #
       def read_file path, &block
-        sftp.file.open fix_path(path), 'r' do |is|
+        path = with_root path
+        path = fix_path path
+
+        sftp.file.open path, 'r' do |is|
           while buff = is.gets
             block.call buff
           end
@@ -64,14 +74,18 @@ module Vos
             block.call writer
           end
         else
-          sftp.file.open fix_path(path), 'w' do |out|
+          path = with_root path
+          path = fix_path path
+          sftp.file.open path, 'w' do |out|
             block.call Writer.new(out)
           end
         end
       end
 
-      def delete_file remote_file_path
-        sftp.remove! fix_path(remote_file_path)
+      def delete_file path
+        path = with_root path
+        path = fix_path path
+        sftp.remove! path
       end
 
       # def move_file path
@@ -83,14 +97,21 @@ module Vos
       # Dir
       #
       def create_dir path
+        path = with_root path
+        path = fix_path path
         sftp.mkdir! path
       end
 
       def delete_dir path
+        path = with_root path
+        path = fix_path path
         exec "rm -r #{path}"
       end
 
       def each_entry path, query, &block
+        path = with_root path
+        path = fix_path path
+
         raise "SshVfsStorage not support :each_entry with query!" if query
 
         sftp.dir.foreach path do |stat|
@@ -125,7 +146,7 @@ module Vos
       # Special
       #
       def tmp &block
-        tmp_dir = "/tmp/vfs_#{rand(10**6)}"
+        tmp_dir = "/tmp_#{rand(10**6)}"
         if block
           begin
             create_dir tmp_dir
@@ -140,6 +161,25 @@ module Vos
       end
 
       def local?; false end
+
+      def _delete_root_dir
+        raise 'refuse to delete / directory!' if root == '/'
+        exec "rm -r #{@root}" unless root.empty?
+      end
+
+      def _create_root_dir
+        raise 'refuse to create / directory!' if root == '/'
+        sftp.mkdir! root unless root.empty?
+      end
+
+      protected
+        def root
+          @root || raise('root not defined!')
+        end
+
+        def with_root path
+          path == '/' ? root : root + path
+        end
     end
   end
 end

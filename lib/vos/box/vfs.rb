@@ -1,10 +1,6 @@
 module Vos
   class Box
     module Vfs
-      def open_fs &block
-        open &block
-      end
-
       def to_entry
         '/'.to_entry_on(self)
       end

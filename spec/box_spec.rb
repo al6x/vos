@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe Vos::Box do
+  with_tmp_spec_dir
+
   before do
-    @box = Vos::Box.new
+    storage = Vos::Drivers::Local.new spec_dir
+    @box = Vos::Box.new storage
     @box.stub :puts
   end
 

@@ -3,6 +3,10 @@ require 'vfs/storages/local'
 module Vos
   module Drivers
     class Local
+      def initialize root = ''
+        @root = root
+      end
+
       #
       # Vfs
       #
@@ -10,7 +14,6 @@ module Vos
       def open &block
         block.call self if block
       end
-      alias_method :open_fs, :open
       def close; end
 
 

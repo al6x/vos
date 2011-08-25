@@ -8,8 +8,9 @@ module Vos
         config: true
       }
 
-      def initialize options = {}
+      def initialize options = {}, root = ''
         raise ":host not provided!" unless options[:host]
+        @root = root
         @options = DEFAULT_OPTIONS.merge options
 
         # config_options = Net::SSH.configuration_for(options[:host])
@@ -58,7 +59,6 @@ module Vos
       # Vfs
       #
       include SshVfsStorage
-      alias_method :open_fs, :open
 
 
       #
