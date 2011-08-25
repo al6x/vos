@@ -3,13 +3,12 @@ require 'net/sftp'
 
 module Vos
   module Drivers
-    class Ssh < Abstract
+    class Ssh
       DEFAULT_OPTIONS = {
         config: true
       }
 
       def initialize options = {}
-        super
         raise ":host not provided!" unless options[:host]
         @options = DEFAULT_OPTIONS.merge options
 
@@ -90,7 +89,7 @@ module Vos
       def host; options[:host] end
 
       protected
-        attr_accessor :ssh, :sftp
+        attr_accessor :ssh, :sftp, :options
 
         def fix_path path
           path.sub(/^\~/, home)

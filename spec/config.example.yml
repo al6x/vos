@@ -1,6 +1,13 @@
-:ssh:
-  :host: some_host.com
+:ssh_driver:
+  :host: xxx.com
 
   # optional, you can omit and use id_rsa key instead
   # :user: some_user
   # :password: some_password
+
+:s3:
+  :driver:
+    :access_key_id:     'xxx'
+    :secret_access_key: 'xxx'
+
+  :bucket: :xxx

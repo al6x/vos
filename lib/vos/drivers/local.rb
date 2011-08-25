@@ -2,7 +2,7 @@ require 'vfs/storages/local'
 
 module Vos
   module Drivers
-    class Local < Abstract
+    class Local
       #
       # Vfs
       #

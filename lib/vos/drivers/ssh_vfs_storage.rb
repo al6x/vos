@@ -27,7 +27,7 @@ module Vos
 
         attrs
       rescue Net::SFTP::StatusException
-        {}
+        {file: false, dir: false}
       end
 
       def set_attributes path, attrs
@@ -49,15 +49,13 @@ module Vos
         # there's no support for :append in Net::SFTP, so we just mimic it
         if append
           attrs = attributes(path)
-          data = if attrs
-            if attrs[:file]
+          data = if attrs[:file]
               os = ""
               read_file(path){|buff| os << buff}
               delete_file path
               os
-            else
-              raise "can't append to dir!"
-            end
+          elsif attrs[:dir]
+            raise "can't append to dir!"
           else
             ''
           end
@@ -127,7 +125,7 @@ module Vos
       # Special
       #
       def tmp &block
-        tmp_dir = "/tmp/vfs_#{rand(10**3)}"
+        tmp_dir = "/tmp/vfs_#{rand(10**6)}"
         if block
           begin
             create_dir tmp_dir
