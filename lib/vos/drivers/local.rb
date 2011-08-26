@@ -4,7 +4,7 @@ module Vos
   module Drivers
     class Local < Vfs::Drivers::Local
       attr_accessor :box
-      
+
       #
       # Shell
       #

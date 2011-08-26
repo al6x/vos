@@ -21,12 +21,12 @@ module Vos
       def attributes path
         path = normalize_path(path)
         return {dir: true, file: false} if path.empty?
-        
+
         file = bucket.objects[path]
         if file.exists?
           attrs = {}
           attrs[:file] = true
-          attrs[:dir] = false          
+          attrs[:dir] = false
           attrs[:size] = file.content_length
           attrs[:updated_at] = file.last_modified
           attrs
@@ -35,7 +35,7 @@ module Vos
         #   attrs[:dir] = true
         else
           return nil
-        end        
+        end
       end
 
       def set_attributes path, attrs
@@ -52,8 +52,8 @@ module Vos
       end
 
       def write_file original_path, append, &block
-        path = normalize_path original_path        
-        
+        path = normalize_path original_path
+
         file = bucket.objects[path]
         if append
           # there's no support for :append in Fog, so we just mimic it

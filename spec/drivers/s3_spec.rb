@@ -66,7 +66,7 @@ if defined? AWS
 
       it 'each' do
         # -> {@driver.each_entry('/not_existing_dir', nil){|path, type| list[path] = type}}.should raise_error
-        
+
         @driver.write_file('/dir/file', false){|w| w.write 'something'}
         @driver.write_file('/dir/dir2/file', false){|w| w.write 'something'}
         @driver.write_file('/other_dir/file', false){|w| w.write 'something'}
