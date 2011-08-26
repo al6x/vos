@@ -21,26 +21,21 @@ module Vos
       def attributes path
         path = normalize_path(path)
         return {dir: true, file: false} if path.empty?
-
+        
         file = bucket.objects[path]
-
-        attrs = {}
-        file_exists = file.exists?
-        attrs[:file] = file_exists
-        if file_exists
-          attrs[:dir] = false
-        elsif dir_exists? path
-          attrs[:dir] = true
-        else
-          return nil
-        end
-
-        if file_exists
+        if file.exists?
+          attrs = {}
+          attrs[:file] = true
+          attrs[:dir] = false          
           attrs[:size] = file.content_length
           attrs[:updated_at] = file.last_modified
-        end
-
-        attrs
+          attrs
+        # There's no dirs, always returning false
+        # elsif dir_exists? path
+        #   attrs[:dir] = true
+        else
+          return nil
+        end        
       end
 
       def set_attributes path, attrs
@@ -57,16 +52,13 @@ module Vos
       end
 
       def write_file original_path, append, &block
-        path = normalize_path original_path
-        # TODO2 Performance lost, extra call to check file existence
+        path = normalize_path original_path        
+        
         file = bucket.objects[path]
-        file_exist = file.exists?
-        raise "can't write, file #{original_path} already exist!" if !append and file_exist
-
         if append
           # there's no support for :append in Fog, so we just mimic it
           writer = Writer.new
-          writer.write file.read if file_exist
+          writer.write file.read if file.exists?
           block.call writer
           file.write writer.data
         else

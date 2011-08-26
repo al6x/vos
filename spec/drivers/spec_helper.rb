@@ -1,5 +1,5 @@
 require 'spec_helper'
 require 'yaml'
 
-require 'vfs/storages/specification'
+require 'vfs/drivers/specification'
 require 'vos/drivers/specification'

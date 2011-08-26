@@ -2,7 +2,7 @@ require 'drivers/spec_helper'
 
 describe Vos::Drivers::Ssh do
   before :all do
-    @storage = @driver = Vos::Drivers::Ssh.new(config[:ssh_driver], '/vos_test')
+    @driver = @driver = Vos::Drivers::Ssh.new(config[:ssh_driver], '/vos_test')
     @driver.open
   end
 
@@ -18,16 +18,16 @@ describe Vos::Drivers::Ssh do
 
   it_should_behave_like "vos driver"
 
-  it_should_behave_like 'vfs storage basic'
-  it_should_behave_like 'vfs storage attributes basic'
-  it_should_behave_like 'vfs storage files'
-  it_should_behave_like 'vfs storage dirs'
-  it_should_behave_like 'vfs storage tmp dir'
+  it_should_behave_like 'vfs driver basic'
+  it_should_behave_like 'vfs driver attributes basic'
+  it_should_behave_like 'vfs driver files'
+  it_should_behave_like 'vfs driver dirs'
+  it_should_behave_like 'vfs driver tmp dir'
 
   describe 'limited ssh attributes' do
     it "attributes for dirs" do
-      @storage.create_dir('/dir')
-      attrs = @storage.attributes('/dir')
+      @driver.create_dir('/dir')
+      attrs = @driver.attributes('/dir')
       attrs[:file].should be_false
       attrs[:dir].should  be_true
       # attrs[:created_at].class.should == Time
@@ -36,8 +36,8 @@ describe Vos::Drivers::Ssh do
     end
 
     it "attributes for files" do
-      @storage.write_file('/file', false){|w| w.write 'something'}
-      attrs = @storage.attributes('/file')
+      @driver.write_file('/file', false){|w| w.write 'something'}
+      attrs = @driver.attributes('/file')
       attrs[:file].should be_true
       attrs[:dir].should  be_false
       # attrs[:created_at].class.should == Time

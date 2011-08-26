@@ -22,6 +22,7 @@ module Vos
       else
         raise 'invalid arguments'
       end
+      @driver.box = self
     end
 
 

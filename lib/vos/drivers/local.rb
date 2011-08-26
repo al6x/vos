@@ -1,22 +1,10 @@
-require 'vfs/storages/local'
+require 'vfs/drivers/local'
 
 module Vos
   module Drivers
-    class Local
-      def initialize root = ''
-        @root = root
-      end
-
-      #
-      # Vfs
-      #
-      include Vfs::Storages::Local::LocalVfsHelper
-      def open &block
-        block.call self if block
-      end
-      def close; end
-
-
+    class Local < Vfs::Drivers::Local
+      attr_accessor :box
+      
       #
       # Shell
       #
@@ -37,11 +25,9 @@ module Vos
         return code, stdout_and_stderr
       end
 
-
       #
       # Other
       #
-      def to_s; '' end
       def host; 'localhost' end
     end
   end

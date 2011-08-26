@@ -2,7 +2,7 @@ module Vos
   class Box
     module Vfs
       def to_entry
-        '/'.to_entry_on(self)
+        '/'.to_entry_on(self.driver)
       end
 
       def to_file
@@ -38,7 +38,7 @@ end
 module Vfs
   class Dir
     def bash cmd, *args
-      storage.bash_without_path "cd #{path} && #{cmd}", *args
+      driver.box.bash_without_path "cd #{path} && #{cmd}", *args
     end
   end
 end

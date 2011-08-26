@@ -1,3 +1,5 @@
+warn 'remove me'
+
 require 'fileutils'
 require 'net/ssh'
 require 'net/sftp'
@@ -5,7 +7,7 @@ require 'net/sftp'
 require 'vfs'
 Vfs.class_eval do
   class << self
-    def default_storage
+    def default_driver
       ::Vos::Box.local
     end
   end
