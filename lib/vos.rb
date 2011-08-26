@@ -4,9 +4,13 @@ require 'vos/gems'
 
 require 'open3'
 
-%w(
-  support
+require 'fileutils'
+require 'net/ssh'
+require 'net/sftp'
 
+require 'vfs'
+
+%w(
   drivers/local
   drivers/ssh_vfs_storage
   drivers/ssh
