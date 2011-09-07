@@ -6,12 +6,10 @@ module Vos
     class S3
       attr_reader :connection, :bucket
 
-      DEFAULT_OPTIONS = {
-        # public: true
-      }
-
-      def initialize initialization_options, options = {}
-        @initialization_options, @options = initialization_options, DEFAULT_OPTIONS.merge(options)
+      def initialize options = {}
+        options = options.clone
+        @bucket_name = options.delete(:bucket) || raise("S3 bucket not provided!")
+        @options = options
       end
 
 
@@ -32,11 +30,8 @@ module Vos
           end
         else
           unless connection
-            @connection = ::AWS::S3.new self.initialization_options.clone
-            unless bucket = options[:bucket]
-              raise("S3 bucket not provided (use Vos::Drivers::S3.new({initialization options ...}, {bucket: '<bucket_name>'}))!")
-            end
-            @bucket = @connection.buckets[bucket]
+            @connection = ::AWS::S3.new self.options.clone
+            @bucket = @connection.buckets[bucket_name]
           end
         end
       end
@@ -52,7 +47,7 @@ module Vos
       #
       # Miscellaneous
       #
-      def inspect; "<#{self.class.name} #{initialization_options.inspect}, #{options.inspect}>" end
+      def inspect; "<#{self.class.name} #{options.merge(bucket: bucket_name).inspect}>" end
       alias_method :to_s, :inspect
 
       def _clear
@@ -60,7 +55,7 @@ module Vos
       end
 
       protected
-        attr_reader :initialization_options, :options
+        attr_reader :options, :bucket_name
     end
   end
 end

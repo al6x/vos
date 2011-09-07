@@ -7,7 +7,7 @@ if defined? AWS
 
   describe 'S3' do
     before :all do
-      @driver = Vos::Drivers::S3.new(config[:s3][:driver], bucket: config[:s3][:bucket])
+      @driver = Vos::Drivers::S3.new config[:s3]
       @driver.open
     end
     after(:all){@driver.close}

@@ -8,9 +8,10 @@ module Vos
         config: true
       }
 
-      def initialize options = {}, root = ''
+      def initialize options = {}
+        options = options.clone
         raise ":host not provided!" unless options[:host]
-        @root = root
+        @root = options.delete(:root) || ''
         @options = DEFAULT_OPTIONS.merge options
 
         # config_options = Net::SSH.configuration_for(options[:host])

@@ -41,7 +41,7 @@ module Vfs
       driver.box.bash_without_path "cd #{path} && #{cmd}", *args
     end
   end
-  
+
   class << self
     def default_driver
       ::Vos::Box.local.driver

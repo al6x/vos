@@ -2,7 +2,7 @@ require 'drivers/spec_helper'
 
 describe Vos::Drivers::Ssh do
   before :all do
-    @driver = @driver = Vos::Drivers::Ssh.new(config[:ssh_driver], '/vos_test')
+    @driver = @driver = Vos::Drivers::Ssh.new(config[:ssh_driver].merge(root: '/vos_test'))
     @driver.open
   end
 

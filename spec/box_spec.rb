@@ -4,7 +4,7 @@ describe Vos::Box do
   with_tmp_spec_dir
 
   before do
-    driver = Vos::Drivers::Local.new spec_dir
+    driver = Vos::Drivers::Local.new root: spec_dir
     @box = Vos::Box.new driver
     @box.stub :puts
   end

@@ -4,7 +4,7 @@ describe Vos::Drivers::Local do
   with_tmp_spec_dir
 
   before do
-    @driver = Vos::Drivers::Local.new(spec_dir)
+    @driver = Vos::Drivers::Local.new root: spec_dir
   end
 
   it_should_behave_like "vos driver"
