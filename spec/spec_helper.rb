@@ -1,6 +1,8 @@
 require 'rspec_ext'
 require 'ruby_ext'
 require 'vos'
+require 'vos/drivers/ssh'
+require 'vos/drivers/s3'
 
 rspec do
   def config

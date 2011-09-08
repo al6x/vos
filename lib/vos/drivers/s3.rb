@@ -4,11 +4,13 @@ require 'vos/drivers/s3_vfs_storage'
 module Vos
   module Drivers
     class S3
+      attr_accessor :box
       attr_reader :connection, :bucket
 
       def initialize options = {}
         options = options.clone
         @bucket_name = options.delete(:bucket) || raise("S3 bucket not provided!")
+        @acl = options.delete(:acl) || :public_read
         @options = options
       end
 
@@ -55,7 +57,7 @@ module Vos
       end
 
       protected
-        attr_reader :options, :bucket_name
+        attr_reader :options, :bucket_name, :acl
     end
   end
 end

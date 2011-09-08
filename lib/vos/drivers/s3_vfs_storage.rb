@@ -60,11 +60,11 @@ module Vos
           writer = Writer.new
           writer.write file.read if file.exists?
           block.call writer
-          file.write writer.data
+          file.write writer.data, acl: acl
         else
           writer = Writer.new
           block.call writer
-          file.write writer.data
+          file.write writer.data, acl: acl
         end
       end
 

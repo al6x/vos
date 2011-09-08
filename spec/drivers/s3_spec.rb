@@ -1,10 +1,7 @@
 require 'drivers/spec_helper'
 
 require 'aws' rescue LoadError
-
 if defined? AWS
-  require 'vos/drivers/s3'
-
   describe 'S3' do
     before :all do
       @driver = Vos::Drivers::S3.new config[:s3]

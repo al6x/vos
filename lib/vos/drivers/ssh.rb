@@ -1,9 +1,12 @@
 require 'net/ssh'
 require 'net/sftp'
+require 'vos/drivers/ssh_vfs_storage'
 
 module Vos
   module Drivers
     class Ssh
+      attr_accessor :box
+
       DEFAULT_OPTIONS = {
         config: true
       }
