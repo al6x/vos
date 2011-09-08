@@ -2,13 +2,12 @@ raise 'ruby 1.9.2 or higher required!' if RUBY_VERSION < '1.9.2'
 
 require 'vos/gems'
 
-require 'open3'
-
-require 'fileutils'
-require 'net/ssh'
-require 'net/sftp'
-
 require 'vfs'
+
+module Vos
+  module Drivers
+  end
+end
 
 %w(
   drivers/local

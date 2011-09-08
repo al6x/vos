@@ -37,13 +37,9 @@ module Vfs
   class Entry
     def symlink_to entry, options = {}
       raise "invalid argument!" unless entry.is_a? Entry
-      raise "can't use symlink ('#{self}' and '#{entry}' are on different storages)!" if self.storage != entry.storage
-      raise "symlink target '' not exist!" unless entry.exist?
-      storage.bash "ln -s#{'f' if options[:override]} #{entry.path} #{path}"
-    end
-
-    def symlink_to! entry
-      symlink_to entry, override: true
+      raise "can't use symlink ('#{self}' and '#{entry}' are on different storages)!" if self.driver != entry.driver
+      raise "symlink target '#{entry}' not exist!" unless entry.exist?
+      driver.box.bash "ln -sf #{entry.path} #{path}"
     end
   end
 
@@ -54,9 +50,9 @@ module Vfs
       raise "#{entry.path} can't be a File!" if entry.file?
 
       if local? and !entry.local?
-        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress #{path}/ root@#{entry.storage.host}:#{entry.path}")
+        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress #{path}/ root@#{entry.driver.host}:#{entry.path}")
       elsif entry.local? and !local?
-        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress root@#{storage.host}:#{path}/ #{entry.path}")
+        Box.local.bash("rsync -e 'ssh' -al --delete --stats --progress root@#{driver.host}:#{path}/ #{entry.path}")
       else
         raise "invalid usage!"
       end

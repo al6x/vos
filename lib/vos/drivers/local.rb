@@ -1,3 +1,6 @@
+require 'open3'
+require 'fileutils'
+
 require 'vfs/drivers/local'
 
 module Vos
