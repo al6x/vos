@@ -30,11 +30,9 @@ module Vos
           attrs[:size] = file.content_length
           attrs[:updated_at] = file.last_modified
           attrs
-        # There's no dirs, always returning false
-        # elsif dir_exists? path
-        #   attrs[:dir] = true
         else
-          return nil
+          # There's no dirs in S3, so we always return nil
+          nil
         end
       end
 
@@ -79,7 +77,8 @@ module Vos
       # Dir
       #
       def create_dir path
-        raise Error, ":create_dir not supported!"
+        # there's no concept of dir in s
+        # raise Error, ":create_dir not supported!"
       end
 
       def delete_dir path
