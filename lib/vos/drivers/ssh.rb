@@ -11,6 +11,9 @@ module Vos
         config: true
       }
 
+      #
+      # Vos::Drivers::Ssh.new name: 'xxx', user: 'xxx', password: 'xxx'
+      #
       def initialize options = {}
         options = options.clone
         raise ":host not provided!" unless options[:host]

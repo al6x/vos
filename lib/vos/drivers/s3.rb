@@ -49,7 +49,7 @@ module Vos
       #
       # Miscellaneous
       #
-      def inspect; "<#{self.class.name} #{options.merge(bucket: bucket_name).inspect}>" end
+      def inspect; "https://#{bucket_name}.s3.amazonaws.com" end
       alias_method :to_s, :inspect
 
       def _clear
