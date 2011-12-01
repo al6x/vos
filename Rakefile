@@ -1,6 +1,6 @@
 require 'rake_ext'
 
-project(
+project \
   name: "vos",
   gem: true,
   summary: "Virtual Operating System",
@@ -8,4 +8,3 @@ project(
 
   author: "Alexey Petrushin",
   homepage: "http://github.com/alexeypetrushin/vos"
-)
