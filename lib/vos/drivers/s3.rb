@@ -10,7 +10,7 @@ module Vos
       def initialize options = {}
         options = options.clone
         @bucket_name = options.delete(:bucket) || raise("S3 bucket not provided!")
-        @write_options = {:acl => :public_read}.options.delete(:write_options)
+        @write_options = {:acl => :public_read}.merge(options.delete(:write_options))
         @options = options
       end
 
