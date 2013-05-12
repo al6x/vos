@@ -24,14 +24,18 @@ module Vos
 
         file = bucket.objects[path]
         if file.exists?
-          attrs = {}
-          attrs[:file] = true
-          attrs[:dir] = false
-          attrs[:size] = file.content_length
-          attrs[:updated_at] = file.last_modified
-          attrs
+          {
+            :file       => true,
+            :dir        => false,
+            :size       => file.content_length,
+            :updated_at => file.last_modified
+          }
+        elsif dir_exists?(path)
+          {
+            :file       => false,
+            :dir        => true
+          }
         else
-          # There's no dirs in S3, so we always return nil
           nil
         end
       end
@@ -58,11 +62,11 @@ module Vos
           writer = Writer.new
           writer.write file.read if file.exists?
           block.call writer
-          file.write writer.data, acl: acl
+          file.write writer.data, write_options
         else
           writer = Writer.new
           block.call writer
-          file.write writer.data, acl: acl
+          file.write writer.data, write_options
         end
       end
 

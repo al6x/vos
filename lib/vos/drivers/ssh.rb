@@ -106,8 +106,7 @@ module Vos
           unless @home
             command = 'cd ~; pwd'
             code, stdout, stderr = exec command
-            raise "can't execute '#{command}'!" unless code == 0
-            @home = stdout.gsub("\n", '')
+            @home = code == 0 ? stdout.gsub("\n", '') : ''
           end
           @home
         end

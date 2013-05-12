@@ -7,6 +7,7 @@ module Vos
         end
 
         def write data
+          data = data.force_encoding(Encoding::ASCII_8BIT)
           @out.write data
         end
       end
